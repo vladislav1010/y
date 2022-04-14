@@ -36,7 +36,6 @@
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.8.1",
-    "@primer/react": "^35.1.0",
     "@prisma/client": "^3.11.1",
     "@remix-run/express": "^1.3.5",
     "@remix-run/node": "^1.3.5",
