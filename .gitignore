@@ -12,3 +12,4 @@ node_modules
 
 # vs-code plugins
 .lh
+newrelic_agent.log

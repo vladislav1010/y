@@ -7,6 +7,7 @@ import { useUser } from "~/utils";
 import { getNoteListItems } from "~/models/note.server";
 
 type LoaderData = {
+  // qfh5
   noteListItems: Awaited<ReturnType<typeof getNoteListItems>>;
 };
 

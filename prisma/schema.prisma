@@ -16,6 +16,8 @@ model User {
 
   password Password?
   notes    Note[]
+  automations Automation[]
+  basePermissions BasePermissions[]
 }
 
 model Password {
@@ -35,4 +37,162 @@ model Note {
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
+}
+
+model BasePermissions {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+
+  base   Base   @relation(fields: [baseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  baseId String
+
+  level BasePermissionLevel
+
+  @@id([userId, baseId])
+}
+
+enum BasePermissionLevel {
+  creator
+  editor
+  commenter
+  readonly
+}
+
+model Base {
+  id String @id @default(cuid())
+  title String
+  color String
+
+  automations Automation[]
+  basePermissions BasePermissions[]
+  tables Table[]
+}
+
+model Automation {
+  id String @id @default(cuid())
+  title String
+  description String
+  
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId String
+
+  trigger AutomationTrigger?
+
+  base Base @relation(fields: [baseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  baseId String
+}
+
+model AutomationTriggerType {
+  id String @id @default(cuid())
+  title String
+  formFields AutomationFormField[]
+  triggers AutomationTrigger[]
+}
+
+model AutomationFormFieldValue {
+  id String @id @default(cuid())
+  // Indicate an error to the user.
+  errorString String?
+  props Json
+}
+
+model AutomationFormField {
+  id String @id @default(cuid())
+  // An identifier for the field that is unique within the nearest containing form.
+  name String?
+  // Content to use as the field label. This value is also used as the placeholder when the field is empty.
+  label String
+  // A detailed description for screen readers.
+  accessibilityDescription String?
+  // Whether the field needs a value.
+  required Boolean?
+  // Indicate an error to the user.
+  error Json?
+  
+  type String
+
+  triggerType AutomationTriggerType @relation(fields: [triggerTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  triggerTypeId String
+}
+
+model AutomationTriggerTest {
+  id      Int      @id @default(autoincrement())
+
+  trigger AutomationTrigger @relation(fields: [triggerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  triggerId String
+
+  input Json
+  output Json?
+  error Json?
+  isSuccess Boolean
+}
+
+model AutomationTrigger {
+  id String @id @default(cuid())
+  
+  type AutomationTriggerType @relation(fields: [typeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  typeId String
+  
+  test AutomationTriggerTest?
+  externalError Json?
+
+  automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  automationId String
+}
+
+model Table {
+  id String @id @default(cuid())
+
+  base Base @relation(fields: [baseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  baseId String
+
+  views View[]
+  fields Field[]
+}
+
+model Field {
+  id String @id @default(cuid())
+
+  table Table @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tableId String
+
+  filterConditions FilterCondition[]
+
+  isPrimary Boolean?
+  order Int?
+  type String
+}
+
+model View {
+  id String @id @default(cuid())
+
+  table Table @relation(fields: [tableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tableId String
+
+  filter Filter? @relation(fields: [filterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  filterId String?
+}
+
+model Filter {
+  id String @id @default(cuid())
+
+  conditions FilterCondition[]
+  conjunction String
+
+  view View?
+  viewId String
+}
+
+model FilterCondition {
+  id String @id @default(cuid())
+
+  filter Filter @relation(fields: [filterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  filterId String
+
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  fieldId String
+
+  operator String
+
+  value String?
 }

@@ -4,6 +4,8 @@ import { prisma } from "~/db.server";
 
 export type { Note } from "@prisma/client";
 
+// qfh5
+// return type Note
 export function getNote({
   id,
   userId,
@@ -15,6 +17,8 @@ export function getNote({
   });
 }
 
+// qfh5
+// return type {id, title}[]
 export function getNoteListItems({ userId }: { userId: User["id"] }) {
   return prisma.note.findMany({
     where: { userId },

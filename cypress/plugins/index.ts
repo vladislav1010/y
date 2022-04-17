@@ -1,3 +1,5 @@
+const cucumber = require("cypress-cucumber-preprocessor").default;
+
 module.exports = (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions
@@ -20,6 +22,8 @@ module.exports = (
       return null;
     },
   });
+
+  on("file:preprocessor", cucumber());
 
   return config;
 };

@@ -1,0 +1,5 @@
+.root {
+  @apply grid isolate;
+  grid-template-rows: theme("spacing.8") minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) theme("spacing.12");
+}

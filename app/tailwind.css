@@ -1,0 +1,37 @@
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+
+@tailwind utilities;
+@tailwind screens;
+
+@layer utilities {
+  /* solidbook 5. Signifiers */
+  /* https://github.com/kentcdodds/kentcdodds.com/tree/main/styles */
+  /* https://tailwindcss.com/docs/reusing-styles#extracting-components-and-partials */
+  /* https://tailwindcss.com/docs/reusing-styles#extracting-classes-with-apply */
+  /* https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction */
+  /* https://www.hackerone.com/ styles structure & DX */
+  .layout-1_bg-color_black {
+    background-color: theme("colors.black") !important;
+    color: theme("colors.gray.600");
+  }
+
+  /* CSS for JS devs Modern Component Architecture */
+  .truncate-block {
+    overflow: hidden;
+    position: relative;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: -o-ellipsis-lastline;
+  }
+  .truncate-block.leading-normal {
+    max-height: 4.5em;
+  }
+
+  .animate {
+    transition: 0.085s all ease-in;
+  }
+}

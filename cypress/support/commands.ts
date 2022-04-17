@@ -26,8 +26,15 @@ declare global {
        *    cy.cleanupUser({ email: 'whatever@example.com' })
        */
       cleanupUser: typeof cleanupUser;
+
+      waitForLoadingToFinish: typeof waitForLoadingToFinish;
     }
   }
+}
+
+function waitForLoadingToFinish() {
+  cy.findAllByLabelText(/loading/i).should("not.have.length", 0);
+  cy.findAllByLabelText(/loading/i).should("have.length", 0);
 }
 
 function login({
@@ -70,6 +77,7 @@ function deleteUserByEmail(email: string) {
 
 Cypress.Commands.add("login", login);
 Cypress.Commands.add("cleanupUser", cleanupUser);
+Cypress.Commands.add("waitForLoadingToFinish", waitForLoadingToFinish);
 
 /*
 eslint
